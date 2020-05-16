@@ -12,6 +12,7 @@ coverage
 jest-report
 yarn-error.log
 .idea
+.env
 
 **/package-lock.json
 package-lock.json

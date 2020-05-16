@@ -1,0 +1,34 @@
+const COMMERCE_API_PATH                 = process.env.COMMERCE_API_PATH;
+const COMMERCE_CLIENT_API_SITE_ID       = process.env.COMMERCE_CLIENT_API_SITE_ID;
+const COMMERCE_CLIENT_CLIENT_ID         = process.env.COMMERCE_CLIENT_CLIENT_ID;
+const COMMERCE_CLIENT_REALM_ID          = process.env.COMMERCE_CLIENT_REALM_ID;
+const COMMERCE_CLIENT_INSTANCE_ID       = process.env.COMMERCE_CLIENT_INSTANCE_ID;
+const COMMERCE_CLIENT_ORGANIZATION_ID   = `f_ecom_${COMMERCE_CLIENT_REALM_ID}_${COMMERCE_CLIENT_INSTANCE_ID}`;
+const COMMERCE_CLIENT_SHORT_CODE        = process.env.COMMERCE_CLIENT_SHORT_CODE;
+const COMMERCE_CORS                     = process.env.COMMERCE_CORS;
+
+// Available Log Levels for the Application
+const LOG_LEVEL_MAP = {
+    TRACE: 0,
+    DEBUG: 1,
+    INFO: 2,
+    WARN: 3,
+    ERROR: 4,
+    SILENT: 5,
+};
+// Default Log Level is set to ERROR within the Application. It can be overwritten here
+const COMMERCE_LOG_LEVEL = LOG_LEVEL_MAP.ERROR;
+const COMMERCE_SESSION_SECRET = 'SomeSecretValue';
+
+export default {
+    COMMERCE_API_PATH,
+    COMMERCE_CLIENT_API_SITE_ID,
+    COMMERCE_CLIENT_CLIENT_ID,
+    COMMERCE_CLIENT_REALM_ID,
+    COMMERCE_CLIENT_INSTANCE_ID,
+    COMMERCE_CLIENT_ORGANIZATION_ID,
+    COMMERCE_CLIENT_SHORT_CODE,
+    COMMERCE_LOG_LEVEL,
+    COMMERCE_SESSION_SECRET,
+    COMMERCE_CORS
+};

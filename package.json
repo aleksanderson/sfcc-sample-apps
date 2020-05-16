@@ -10,32 +10,29 @@
   },
   "scripts": {
     "build": "lerna run build --stream",
-    "build:app": "lerna run build --scope storefront-lwc --stream",
+    "build:bff-app": "lerna run build --scope storefront-bff --stream",
     "lint": "lerna run lint --stream",
     "lint:fix": "lerna run lint:fix --stream",
     "clean": "lerna run clean --stream",
     "clean:stats": "lerna run clean:stats --stream",
     "test": "lerna run test:unit --stream",
     "test:watch": "lerna run test:unit:watch --stream",
-    "start": "yarn start:lwc",
-    "start:dev": "lerna run start:dev --scope storefront-lwc --stream",
-    "start:watch": "yarn start:lwc:watch",
-    "stop": "yarn stop:lwc",
-    "start:lwc": "lerna run start --scope storefront-lwc --stream",
-    "start:lwc:watch": "lerna run start:watch --scope storefront-lwc --stream",
-    "stop:lwc": "lerna run stop --scope storefront-lwc --stream"
+    "start": "yarn start:bff",
+    "start:dev": "lerna run start:dev --scope storefront-bff --stream",
+    "start:watch": "yarn start:bff:watch",
+    "stop": "yarn stop:bff",
+    "start:bff": "lerna run start --scope storefront-bff --stream",
+    "start:bff:watch": "lerna run start:watch --scope storefront-bff --stream",
+    "stop:bff": "lerna run stop --scope storefront-bff --stream"
   },
   "workspaces": {
     "packages": [
       "packages/sfcc-base",
       "packages/@sfcc-core/*",
       "packages/@sfcc-bff/*",
-      "packages/storefront-lwc"
+      "packages/storefront-bff"
     ],
     "nohoist": [
-      "**/bootstrap",
-      "**/bootstrap/**",
-      "**/font-awesome"
     ]
   },
   "engines": {
