@@ -6,6 +6,7 @@ const COMMERCE_CLIENT_INSTANCE_ID       = process.env.COMMERCE_CLIENT_INSTANCE_I
 const COMMERCE_CLIENT_ORGANIZATION_ID   = `f_ecom_${COMMERCE_CLIENT_REALM_ID}_${COMMERCE_CLIENT_INSTANCE_ID}`;
 const COMMERCE_CLIENT_SHORT_CODE        = process.env.COMMERCE_CLIENT_SHORT_CODE;
 const COMMERCE_CORS                     = process.env.COMMERCE_CORS;
+const REDIS_URL                         = process.env.REDIS_URL;
 
 // Available Log Levels for the Application
 const LOG_LEVEL_MAP = {
@@ -30,5 +31,6 @@ export default {
     COMMERCE_CLIENT_SHORT_CODE,
     COMMERCE_LOG_LEVEL,
     COMMERCE_SESSION_SECRET,
-    COMMERCE_CORS
+    COMMERCE_CORS,
+    REDIS_URL
 };

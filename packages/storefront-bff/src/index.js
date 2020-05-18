@@ -2,6 +2,11 @@ import passport from 'passport';
 import * as graphqlPassport from 'graphql-passport';
 import express from 'express';
 import expressSession from 'express-session';
+import url from 'url';
+
+import redis from 'redis';
+import connectRedis from 'connect-redis';
+
 import * as CommerceSdk from 'commerce-sdk';
 import { getCommerceClientConfig } from '@sfcc-core/apiconfig';
 
@@ -55,7 +60,7 @@ function validateConfig(config) {
                 .getShopperToken(clientConfig, { type: 'guest' })
                 .then(token => {
                     const customerId = JSON.parse(token.decodedToken.sub)
-                        .CustomerInfo.customer_id;
+                        .CustomerInfo.customerId;
                     done(null, {
                         id: customerId,
                         token: token.getBearerHeader(),
@@ -77,10 +82,25 @@ function validateConfig(config) {
     // Create Express Instance, register it with demo app and start demo app.
     app.expressApplication = express();
 
+    // configure session
     const sess = {
         secret: config.COMMERCE_SESSION_SECRET, // This is something new we add to the config
         cookie: {},
     };
+    if(process.env.REDIS_URL) {
+        const redisClient = redis.createClient();
+        const redisStore = connectRedis(expressSession);
+        const { hostname, port } = url.parse(process.env.REDIS_URL);
+        //redis config
+        sess.resave = false;
+        sess.saveUninitialized = true
+        sess.store = new redisStore({ 
+            host: hostname, 
+            port,
+            client: redisClient, 
+            ttl: 86400
+        });
+    }
 
     if (mode === 'production') {
         app.expressApplication.set('trust proxy', 1); // trust first proxy
@@ -99,10 +119,7 @@ function validateConfig(config) {
 
     // start the server
     const server = app.expressApplication.listen(port, () => {
-        const portToTellUser =
-            process.env.NODE_ENV === 'development'
-                ? 3000
-                : server.address().port;
+        const portToTellUser = server.address().port;
 
         console.log('======== BFF runtime ======== ');
         console.log(
