@@ -17,12 +17,12 @@ COPY tsconfig.build.json ./tsconfig.build.json
 RUN yarn install --frozen-lockfile
 
 # install global dependencies
-RUN yarn global add tsdx
+#RUN yarn global add tsdx
 
 # build packages
 RUN yarn build
 
-# -- pack stage --
+# -- release stage --
 
 FROM node:12.16.3-alpine
 

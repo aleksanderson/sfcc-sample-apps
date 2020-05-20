@@ -18,7 +18,7 @@ export function getCommerceClientConfig(config: Config) {
      * Memory cache - cacheManager = null
      * Redis cache  - cacheManager = CacheManagerRedis
      */
-    let cacheManager: CacheManagerRedis | null = null;
+    let cacheManager: CacheManagerRedis | undefined;
     if(config.REDIS_URL) {
         cacheManager = new CacheManagerRedis({ connection: config.REDIS_URL });
     }
