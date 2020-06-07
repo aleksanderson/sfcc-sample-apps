@@ -1,38 +1,24 @@
-/*
-    Copyright (c) 2020, salesforce.com, inc.
-    All rights reserved.
-    SPDX-License-Identifier: BSD-3-Clause
-    For full license text, see the LICENSE file in the repo root or https://opensource.org/licenses/BSD-3-Clause
-*/
-//
-// SFCC Core registry and core extensions/services
-//
 import { core, LOGGER_KEY } from '@sfcc-core/core';
-import '@sfcc-core/logger';
-import '@sfcc-core/apiconfig';
-import '@sfcc-core/core-graphql';
-
-
-import '@sfcc-bff/productapi';
-// import '@sfcc-bff/basketapi';
-
 import { CORE_GRAPHQL_KEY, EXPRESS_KEY } from '@sfcc-core/core-graphql';
 import { API_CONFIG_KEY } from '@sfcc-core/apiconfig';
 
-class SampleApp {
+/** Register BFF modules **/
+import '@sfcc-core/logger';
+import '@sfcc-core/apiconfig';
+import '@sfcc-core/core-graphql';
+import '@sfcc-bff/productapi';
+import '@sfcc-bff/basketapi';
 
-    /**
-     * Initialize the Application
-     */
+class BFFApplication {
 
     constructor(config) {
-        //
-        // Need to set api config data before any API extensions are instantiated.
-        //
         this.apiConfig = core.getService(API_CONFIG_KEY);
         Object.assign(config, this.apiConfig.config);
         this.apiConfig.config = config;
+        _validateConfig(this.apiConfig.config);
+
         this.logger = core.getService(LOGGER_KEY);
+
         if (this.apiConfig.config.COMMERCE_LOG_LEVEL) {
             this.logger.setLevel(this.apiConfig.config.COMMERCE_LOG_LEVEL);
         }
@@ -49,15 +35,10 @@ class SampleApp {
     }
 
     start() {
-        //
-        // Start Apollo/GraphQL and register Apollo with Express Middleware
-        //
         core.getService(CORE_GRAPHQL_KEY).start();
-
         this.status();
     }
 
-    // Just some development output
     status() {
         this.logger.debug(
             'Is Express Registered?',
@@ -82,19 +63,28 @@ class SampleApp {
     }
 }
 
-export async function getApp() {
-    let API_CONFIG_DATA = {};
-    try {
-        const API = await require('./api.js');
-        API_CONFIG_DATA = API.default;
-    } catch (e) {
-        if (process.env.NODE_ENV === 'development') {
-            console.error(
-                'WARNING: There is no api.js found! Copy the api.example.js in api.js and customize with your own variables'
-                    .red,
+function _validateConfig(config) {
+    const REQUIRED_KEYS = [
+        'COMMERCE_API_PATH',
+        'COMMERCE_CLIENT_API_SITE_ID',
+        'COMMERCE_CLIENT_CLIENT_ID',
+        'COMMERCE_CLIENT_REALM_ID',
+        'COMMERCE_CLIENT_INSTANCE_ID',
+        'COMMERCE_CLIENT_ORGANIZATION_ID',
+        'COMMERCE_CLIENT_SHORT_CODE',
+        'COMMERCE_SESSION_SECRET',
+    ];
+
+    REQUIRED_KEYS.forEach(KEY => {
+        if (!config[KEY]) {
+            console.log(
+                `Make sure ${KEY} is defined within api.js or as an environment variable`
             );
             process.exit(1);
         }
-    }
-    return new SampleApp(API_CONFIG_DATA);
+    });
+}
+
+export function getApp(config) {
+    return new BFFApplication(config);
 }
